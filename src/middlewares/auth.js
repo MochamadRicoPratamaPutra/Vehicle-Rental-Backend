@@ -8,7 +8,7 @@ const verifyAccess = (req, res, next) => {
     return next(error)
   }
   const result = token.split(' ')[1]
-  console.log(result)
+  // console.log(result)
   jwt.verify(result, process.env.SECRET_KEY, function (err, decoded) {
     if (err) {
       if (err.name === 'TokenExpiredError') {
