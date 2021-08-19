@@ -49,15 +49,15 @@ const insertVehicle = (req, res, next) => {
   const userRole = req.role;
   const userId = req.id;
   console.log(userRole);
+  console.log(req.file)
   if (userRole === 'admin' || userRole === 'user') {
-    const { name, price, description, stock, city, avaliability, type, prepayment } = req.body;
+    const { name, price, description, stock, city, type, prepayment } = req.body;
     const data = {
       name: name,
       price: price,
       description: description,
       stock: stock,
       img: `${process.env.BASE_URL}/file/${req.file.filename}`,
-      avaliability: avaliability,
       prepayment: prepayment,
       type: type,
       city: city,

@@ -55,35 +55,34 @@ const updateUser = (req, res, next) => {
   const id = req.params.id;
   const userRole = req.role;
   const userId = req.id;
-  const { name, email, password, phoneNumber, gender } = req.body;
+  const { name, email, phone, gender, birthDate, address, displayName } = req.body;
   if (userRole === 'user') {
     if (id === userId) {
-      bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(password, salt, function (err, hash) {
-          const data = {
-            name: name,
-            email: email,
-            // password: hash,
-            phoneNumber: phoneNumber,
-            gender: gender,
-            profilePicture: `${process.env.BASE_URL}/file/${req.file.filename}` || null,
-            updatedAt: new Date(),
-          };
-          userModel
-            .updateUser(id, data)
-            .then(() => {
-              res.json({
-                message: 'data successfuly updated',
-                data: data,
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-              const errorMessage = new createError.InternalServerError();
-              next(errorMessage);
-            });
+      const data = {
+        address: address,
+        birthDate: birthDate,
+        displayName: displayName,
+        gender: gender,
+        phone: phone,
+        name: name,
+        email: email,
+        gender: gender,
+        profilePicture: `${process.env.BASE_URL}/file/${req.file.filename}` || null,
+        updatedAt: new Date(),
+      };
+      userModel
+        .updateUser(id, data)
+        .then(() => {
+          res.json({
+            message: 'data successfuly updated',
+            data: data,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          const errorMessage = new createError.InternalServerError();
+          next(errorMessage);
         });
-      });
     } else {
       const errorMessage = new createError.Forbidden();
       next(errorMessage);
@@ -98,7 +97,7 @@ const deleteUser = async (req, res, next) => {
   const id = req.params.id;
   const userRole = req.role;
   const email = req.email;
-  const idUser = req.id
+  const idUser = req.id;
   const user = await userModel.findUser(email);
   if (userRole === 'admin') {
     userModel
@@ -128,8 +127,7 @@ const deleteUser = async (req, res, next) => {
         const errorMessage = new createError.InternalServerError();
         next(errorMessage);
       });
-  }
-  else {
+  } else {
     const errorMessage = new createError.Forbidden();
     next(errorMessage);
   }
