@@ -9,7 +9,7 @@ const getAllVehicle = (page, limit, column, search, sort, keyword) => {
         const paginatingResult = {}
         connection.query(`SELECT * FROM vehicle WHERE ${search} LIKE '%${keyword}%' ORDER BY ${column} ${sort} LIMIT ${limit} OFFSET ${startIndex};`, (error, result) => {
           if (!error) {
-            connection.query('SELECT COUNT(*) AS count FROM vehicle', (errorCount, resultCount) => {
+            connection.query(`SELECT COUNT(*) AS count FROM vehicle WHERE ${search} LIKE '%${keyword}%' ORDER BY ${column} ${sort}`, (errorCount, resultCount) => {
               if (!errorCount) {
                 console.log(resultCount[0].count)
                 if (endIndex < resultCount[0].count) {
@@ -50,7 +50,7 @@ const getAllVehicle = (page, limit, column, search, sort, keyword) => {
         const paginatingResult = {}
         connection.query(`SELECT * FROM vehicle ORDER BY ${column} ${sort} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
           if (!error) {
-            connection.query('SELECT COUNT(*) AS count FROM vehicle', (errorCount, resultCount) => {
+            connection.query(`SELECT COUNT(*) AS count FROM vehicle ORDER BY ${column} ${sort}`, (errorCount, resultCount) => {
               if (!errorCount) {
                 console.log(resultCount[0].count)
                 if (endIndex < resultCount[0].count) {
@@ -91,7 +91,7 @@ const getAllVehicle = (page, limit, column, search, sort, keyword) => {
         const paginatingResult = {}
         connection.query(`SELECT * FROM vehicle WHERE ${search} LIKE '%${keyword}%' LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
           if (!error) {
-            connection.query('SELECT COUNT(*) AS count FROM vehicle', (errorCount, resultCount) => {
+            connection.query(`SELECT COUNT(*) AS count FROM vehicle WHERE ${search} LIKE '%${keyword}%'`, (errorCount, resultCount) => {
               if (!errorCount) {
                 console.log(resultCount[0].count)
                 if (endIndex < resultCount[0].count) {
