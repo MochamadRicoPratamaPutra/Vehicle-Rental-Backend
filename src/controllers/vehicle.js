@@ -87,14 +87,13 @@ const updateVehicle = (req, res, next) => {
   // const price = req.body.price
   // const description =req.body.description
   const id = req.params.id;
-  const { name, price, description, stock, city, avaliability, type, prepayment } = req.body;
+  const { name, price, description, stock, city, type, prepayment } = req.body;
   const data = {
     name: name,
     price: price,
     description: description,
     stock: stock,
     img: `${process.env.BASE_URL}/file/${req.file.filename}`,
-    avaliability: avaliability,
     prepayment: prepayment,
     type: type,
     city: city,

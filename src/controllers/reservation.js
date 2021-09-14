@@ -27,7 +27,7 @@ const getAllReservation = (req, res, next) => {
     });
 };
 const getReservationById = (req, res, next) => {
-  const id = req.params.idsaya;
+  const id = req.params.id;
   reservationModel
     .getReservationById(id)
     .then((result) => {
@@ -50,7 +50,8 @@ const insertReservation = (req, res, next) => {
   const userId = req.id;
   console.log(userRole);
   if (userRole === 'admin' || userRole === 'user') {
-    const { bookingCode, paymentCode, status, userIdRenter, vehicleId, quantity, paymentMethod, returnAt, totalPayment } = req.body;
+    const { bookingCode, paymentCode, status, rentedFrom, vehicleId, quantity, paymentMethod, returnAt, totalPayment } =
+      req.body;
     const data = {
       bookingCode: bookingCode,
       paymentCode: paymentCode,
@@ -59,10 +60,10 @@ const insertReservation = (req, res, next) => {
       vehicleId: vehicleId,
       paymentMethod: paymentMethod,
       quantity: quantity,
-      userIdRenter: userIdRenter,
       totalPayment: totalPayment,
       createdAt: new Date(),
-      returnAt: returnAt
+      rentedFrom: rentedFrom,
+      returnAt: returnAt,
     };
     // fs.unlinkSync(path.dirname(''))
     reservationModel
@@ -103,10 +104,32 @@ const deleteReservation = (req, res, next) => {
     next(errorMessage);
   }
 };
-
+const approvePayment = (req, res, next) => {
+  const id = req.params.id;
+  const userRole = req.role;
+  console.log(id);
+  if (userRole === 'admin') {
+    reservationModel
+      .approvePayment(id)
+      .then((result) => {
+        const reservations = result;
+        // client.setex(`reservation/${id}`, 60, JSON.stringify(reservations))
+        helpers.response(res, reservations, 200);
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = new createError.InternalServerError();
+        next(errorMessage);
+      });
+  } else {
+    const errorMessage = new createError.Forbidden();
+    next(errorMessage);
+  }
+};
 module.exports = {
   getAllReservation,
   getReservationById,
   insertReservation,
   deleteReservation,
+  approvePayment,
 };

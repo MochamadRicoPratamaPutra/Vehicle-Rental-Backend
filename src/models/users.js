@@ -214,8 +214,10 @@ const verification = (id) =>{
   return new Promise((resolve, reject) => {
     connection.query('UPDATE user SET status=1 WHERE id = ?', id, (error, result) => {
       if (!error) {
+        console.log(result)
         resolve(result)
       } else {
+        // console.log(error)
         reject(error)
       }
     })

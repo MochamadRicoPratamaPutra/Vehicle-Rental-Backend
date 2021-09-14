@@ -139,6 +139,7 @@ const verificationUser = (req, res, next) => {
   userModel
     .verification(id)
     .then((result) => {
+      // console.log(result.changedRows)
       const validate = result.changedRows;
       if (validate) {
         res.status(200);
@@ -259,6 +260,27 @@ const login = async (req, res, next) => {
             // console.log(token)
             // console.log(process.env.SECRET_KEY)
             delete user.password;
+            res.cookie('token', token, {
+              // httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 60,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            res.cookie('role', user.role, {
+              // httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 60,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            res.cookie('id', user.id, {
+              // httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 60,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
             user.token = token;
             helpers.response(res, user, 200);
           }
