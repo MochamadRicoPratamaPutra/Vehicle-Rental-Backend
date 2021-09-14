@@ -15,7 +15,7 @@ const mymiddleware = (req, res, next) => {
 app.use(mymiddleware);
 const optionCors = {
   credentials: true,
-  origin: `${process.env.TARGET_URL}`
+  origin: true
 }
 app.use(cors(optionCors))
 app.use(cookieParser())

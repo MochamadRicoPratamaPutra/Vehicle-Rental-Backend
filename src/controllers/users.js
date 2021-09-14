@@ -265,21 +265,21 @@ const login = async (req, res, next) => {
               maxAge: 1000 * 60 * 60 * 60,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              // sameSite: 'strict',
             });
             res.cookie('role', user.role, {
               // httpOnly: true,
               maxAge: 1000 * 60 * 60 * 60,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              // sameSite: 'strict',
             });
             res.cookie('id', user.id, {
               // httpOnly: true,
               maxAge: 1000 * 60 * 60 * 60,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              // sameSite: 'strict',
             });
             user.token = token;
             helpers.response(res, user, 200);
