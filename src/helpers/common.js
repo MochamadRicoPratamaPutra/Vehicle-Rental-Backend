@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 function main(name, email, id) {
   const transporter = nodemailer.createTransport({
-    host: process.env.COFFEESHOP_HOST,
-    port: process.env.COFFEESHOP_PORT,
-    secure: process.env.COFFEESHOP_SECURE,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: process.env.EMAIL_SECURE,
     auth: {
       user: `${process.env.EMAIL_MAILER}`,
       pass: `${process.env.EMAIL_PASSWORD}`,
