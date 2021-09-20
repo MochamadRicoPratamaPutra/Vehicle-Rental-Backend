@@ -295,6 +295,23 @@ const login = async (req, res, next) => {
     return helpers.response(res, null, 401, { message: 'wrong email or password' });
   }
 };
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie('token')
+    res.clearCookie('user_id')
+    res.clearCookie('user_role')
+    res.clearCookie('user_image')
+    res.clearCookie('user_isAuth')
+
+    res.status(200);
+    res.json({
+      message: 'Success logout'
+    });
+  } catch (error) {
+    console.log(error)
+    next(new Error(error.message))
+  }
+}
 module.exports = {
   getAllUser,
   getUserById,
@@ -306,4 +323,5 @@ module.exports = {
   verificationUser,
   sendEmailForgot,
   forgotPassword,
+  logout
 };

@@ -16,4 +16,5 @@ router
   .delete('/:id', auth.verifyAccess, userController.deleteUser)
   .delete('/', auth.verifyAccess, userController.deleteUser)
   .use('/verification/:id', userController.verificationUser)
+  .get('/logout', userController.logout)
 module.exports = router
