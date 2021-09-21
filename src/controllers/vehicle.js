@@ -66,11 +66,11 @@ const insertVehicle = async (req, res, next) => {
       createdAt: new Date(),
     };
     if (req.file) {
-      data.profilePicture = req.file;
+      data.img = req.file;
       const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-      const { path } = data.profilePicture;
+      const { path } = data.img;
       const newPath = await uploader(path);
-      data.profilePicture = newPath.url;
+      data.img = newPath.url;
     }  
     // fs.unlinkSync(path.dirname(''))
     vehicleModel
@@ -108,11 +108,11 @@ const updateVehicle = async (req, res, next) => {
     updatedAt: new Date(),
   };
   if (req.file) {
-    data.profilePicture = req.file;
+    data.img = req.file;
     const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-    const { path } = data.profilePicture;
+    const { path } = data.img;
     const newPath = await uploader(path);
-    data.profilePicture = newPath.url;
+    data.img = newPath.url;
   }  
   const userRole = req.role;
   if (userRole === 'admin' || userRole === 'user') {
