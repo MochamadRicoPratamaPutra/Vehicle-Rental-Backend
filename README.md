@@ -2,6 +2,14 @@
 
 Vehicle Rental is a web for renting vehicle like car, bike, and motorcycle, based on 5 big city in Indonesia.
 
+<p align="center">
+    <a href="https://vehicle-rental-rico.vercel.app/">View Demo</a>
+    ·
+    <a href="https://github.com/MochamadRicoPratamaPutra/Vehicle-Rental-Backend/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/MochamadRicoPratamaPutra/Vehicle-Rental-Backend/pulls">Request Feature</a>
+  </p>
+
 ## Built With
 
 [![Express.js](https://img.shields.io/badge/Express.js-4.x-orange.svg?style=rounded-square)](https://expressjs.com/en/starter/installing.html)
@@ -23,7 +31,6 @@ Vehicle Rental is a web for renting vehicle like car, bike, and motorcycle, base
 5. Create a database with the name #nama_database, and Import file sql to **phpmyadmin**
 6. Open Postman desktop application or Chrome web app extension that has installed before
 7. Choose HTTP Method and enter request url.(ex. localhost:3000/)
-8. You can see all the end point [here](https://documenter.getpostman.com/view/9852901/TzJoEfvL)
 
 ## Set up .env file
 
@@ -35,9 +42,14 @@ Open .env file on your favorite code editor, and copy paste this code below :
     DB_PASS
     DB_PORT
     PORT
-    BASE_URL
-    TARGET_URL
-    SECRET_KEY
+    BASE_URL = ('your backend url')
+    TARGET_URL = ('your frontend url')
+    SECRET_KEY = ('secret key for JWT')
+    EMAIL_HOST = ('smtp google')
+    EMAIL_PORT
+    EMAIL_SECURE = TRUE
+    EMAIL_MAILER
+    EMAIL_PASSWORD
 
 ## Contact
 
