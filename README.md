@@ -48,8 +48,11 @@ Open .env file on your favorite code editor, and copy paste this code below :
     EMAIL_HOST = ('smtp google')
     EMAIL_PORT
     EMAIL_SECURE = TRUE
-    EMAIL_MAILER
+    EMAIL_MAILER = ('your email that will be use for emailing user')
     EMAIL_PASSWORD
+    CLOUD_NAME = ('your cloudinary cloud name')
+    CLOUDINARY_API_KEY
+    CLOUDINARY_API_SECRET
 
 ## Contact
 
