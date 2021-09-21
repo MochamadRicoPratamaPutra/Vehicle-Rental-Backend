@@ -2,6 +2,7 @@ const vehicleModel = require('../models/vehicle');
 const helpers = require('../helpers/helpers');
 const createError = require('http-errors');
 const path = require('path');
+const cloudinary = require('../middlewares/cloudinary');
 // const redis = require('redis')
 // const client = redis.createClient(6379)
 // const fs = require('fs')
@@ -42,7 +43,7 @@ const getVehicleById = (req, res, next) => {
     });
 };
 
-const insertVehicle = (req, res, next) => {
+const insertVehicle = async (req, res, next) => {
   // const name = req.body.name
   // const price = req.body.price
   // const description =req.body.description
@@ -57,13 +58,20 @@ const insertVehicle = (req, res, next) => {
       price: price,
       description: description,
       stock: stock,
-      img: `${process.env.BASE_URL}/file/${req.file.filename}`,
+      // img: `${process.env.BASE_URL}/file/${req.file.filename}`,
       prepayment: prepayment,
       type: type,
       city: city,
       userId: userId,
       createdAt: new Date(),
     };
+    if (req.file) {
+      data.profilePicture = req.file;
+      const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+      const { path } = data.profilePicture;
+      const newPath = await uploader(path);
+      data.profilePicture = newPath.url;
+    }  
     // fs.unlinkSync(path.dirname(''))
     vehicleModel
       .insertVehicle(data)
@@ -82,7 +90,7 @@ const insertVehicle = (req, res, next) => {
   }
 };
 
-const updateVehicle = (req, res, next) => {
+const updateVehicle = async (req, res, next) => {
   // const name = req.body.name
   // const price = req.body.price
   // const description =req.body.description
@@ -93,12 +101,19 @@ const updateVehicle = (req, res, next) => {
     price: price,
     description: description,
     stock: stock,
-    img: `${process.env.BASE_URL}/file/${req.file.filename}`,
+    // img: `${process.env.BASE_URL}/file/${req.file.filename}`,
     prepayment: prepayment,
     type: type,
     city: city,
     updatedAt: new Date(),
   };
+  if (req.file) {
+    data.profilePicture = req.file;
+    const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+    const { path } = data.profilePicture;
+    const newPath = await uploader(path);
+    data.profilePicture = newPath.url;
+  }  
   const userRole = req.role;
   if (userRole === 'admin' || userRole === 'user') {
     vehicleModel
