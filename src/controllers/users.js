@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const common = require('../helpers/common');
 const path = require('path');
 const confirmForgot = require('../helpers/confirmForgot');
+const cloudinary = require('../middleware/cloudinary');
 
 const getAllUser = (req, res, next) => {
   const page = parseInt(req.query.page);
@@ -67,9 +68,16 @@ const updateUser = (req, res, next) => {
         name: name,
         email: email,
         gender: gender,
-        profilePicture: `${process.env.BASE_URL}/file/${req.file.filename}` || null,
+        // profilePicture: `${process.env.BASE_URL}/file/${req.file.filename}` || null,
         updatedAt: new Date(),
       };
+      if (req.file) {
+        data.profilePicture = req.file;
+        const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+        const { path } = data.profilePicture;
+        const newPath = await uploader(path);
+        data.profilePicture = newPath.url;
+      }  
       userModel
         .updateUser(id, data)
         .then(() => {
