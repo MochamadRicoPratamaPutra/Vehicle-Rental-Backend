@@ -49,7 +49,7 @@ const getUserById = (req, res, next) => {
       next(errorMessage);
     });
 };
-const updateUser = (req, res, next) => {
+const updateUser = async(req, res, next) => {
   // const name = req.body.name
   // const price = req.body.price
   // const description =req.body.description
