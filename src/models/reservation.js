@@ -200,8 +200,12 @@ const getReservationById = (id) => {
 const getReservationUser = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone, reservation.userIdBorrower from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id LIKE ? AND reservation.userIdBorrower LIKE ? AND vehicle.id = reservation.vehicleId',
-      id,
+      `SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, 
+      vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, 
+      vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, 
+      reservation.totalPayment, user.name as userName, user.email, user.phone, reservation.userIdBorrower 
+      from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id LIKE ${id} 
+      AND reservation.userIdBorrower LIKE ${id} AND vehicle.id = reservation.vehicleId`,
       (error, result) => {
         if (!error) {
           resolve(result);
