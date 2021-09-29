@@ -42,6 +42,22 @@ const getReservationById = (req, res, next) => {
     });
 };
 
+const getReservationUser = (req, res, next) => {
+  const id = req.params.id;
+  reservationModel
+    .getReservationUser(id)
+    .then((result) => {
+      const reservations = result;
+      // client.setex(`reservation/${id}`, 60, JSON.stringify(reservations))
+      helpers.response(res, reservations, 200);
+    })
+    .catch((error) => {
+      console.log(error);
+      const errorMessage = new createError.InternalServerError();
+      next(errorMessage);
+    });
+};
+
 const insertReservation = (req, res, next) => {
   // const name = req.body.name
   // const price = req.body.price
@@ -129,6 +145,7 @@ const approvePayment = (req, res, next) => {
 module.exports = {
   getAllReservation,
   getReservationById,
+  getReservationUser,
   insertReservation,
   deleteReservation,
   approvePayment,

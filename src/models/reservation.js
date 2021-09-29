@@ -167,13 +167,16 @@ const getAllReservation = (page, limit, column, search, sort, keyword) => {
           }
         });
       } else {
-        connection.query('SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id = reservation.userIdBorrower AND vehicle.id = reservation.vehicleId', (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
+        connection.query(
+          'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id = reservation.userIdBorrower AND vehicle.id = reservation.vehicleId',
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
           }
-        });
+        );
       }
     }
   });
@@ -182,6 +185,22 @@ const getReservationById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
       'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE reservation.id = ? AND reservation.userIdBorrower = user.id AND reservation.vehicleId = vehicle.id',
+      id,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const getReservationUser = (id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone, reservation.userIdBorrower from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id LIKE ? AND reservation.userIdBorrower LIKE ? AND vehicle.id = reservation.vehicleId',
       id,
       (error, result) => {
         if (!error) {
@@ -231,6 +250,7 @@ const approvePayment = (id) => {
 module.exports = {
   getAllReservation,
   getReservationById,
+  getReservationUser,
   insertReservation,
   deleteReservation,
   approvePayment,
