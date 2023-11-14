@@ -169,6 +169,48 @@ const getAllVehicle = (page, limit, column, search, sort, keyword) => {
     }
   })
 }
+
+const getVehicleByTypeAndCity = (page, limit, type, city, sort) => {
+  return new Promise((resolve, reject) => {
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatingResult = {};
+    connection.query(
+      `SELECT * FROM vehicle WHERE type = '${type}' AND city = '${city}' ORDER BY createdAt DESC LIMIT ${limit} OFFSET ${startIndex}`,
+      (error, result) => {
+        if (!error) {
+          connection.query(
+            "SELECT COUNT(*) AS count FROM vehicle",
+            (errorCount, resultCount) => {
+              if (!errorCount) {
+                console.log(resultCount[0].count);
+                if (endIndex < resultCount[0].count) {
+                  paginatingResult.next = {
+                    page: page + 1,
+                    limit: limit,
+                  };
+                }
+                if (startIndex > 0) {
+                  paginatingResult.previous = {
+                    page: page - 1,
+                    limit: limit,
+                  };
+                }
+                paginatingResult.result = result;
+                resolve(paginatingResult);
+              } else {
+                reject(errorCount);
+              }
+            }
+          );
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 const getVehicleById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM vehicle WHERE id = ?', id, (error, result) => {
@@ -220,6 +262,7 @@ const deleteVehicle = (id) => {
 module.exports = {
   getAllVehicle,
   getVehicleById,
+  getVehicleByTypeAndCity,
   insertVehicle,
   updateVehicle,
   deleteVehicle

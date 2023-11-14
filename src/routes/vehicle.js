@@ -5,6 +5,7 @@ const upload = require('../middlewares/multer')
 const auth = require('../middlewares/auth')
 // const redisCache = require('../middlewares/redis')
 router
+  .get('/vehicle-by-type-city', vehicleController.getVehicleByTypeAndCity)
   .get('/', vehicleController.getAllVehicle)
   .get('/:idsaya', vehicleController.getVehicleById)
   .post('/', auth.verifyAccess, upload.single('img'), vehicleController.insertVehicle)

@@ -27,6 +27,27 @@ const getAllVehicle = (req, res, next) => {
       next(errorMessage);
     });
 };
+
+const getVehicleByTypeAndCity = (req, res, next) => {
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const type = req.query.type;
+  const city = req.query.city;
+  const sort = req.query.sort;
+  vehicleModel
+    .getVehicleByTypeAndCity(page, limit, type, city, sort)
+    .then((result) => {
+      const vehicles = result;
+      // client.setex('allVehicle', 60, JSON.stringify(vehicles))
+      helpers.response(res, vehicles, 200);
+  })
+    .catch((error) => {
+      console.log(error);
+      const errorMessage = new createError.InternalServerError();
+      next(errorMessage);
+    });
+}
+
 const getVehicleById = (req, res, next) => {
   const id = req.params.idsaya;
   vehicleModel
@@ -101,19 +122,19 @@ const updateVehicle = async (req, res, next) => {
     price: price,
     description: description,
     stock: stock,
-    // img: `${process.env.BASE_URL}/file/${req.file.filename}`,
+    img: `${process.env.BASE_URL}/file/${req.file.filename}`,
     prepayment: prepayment,
     type: type,
     city: city,
     updatedAt: new Date(),
   };
-  if (req.file) {
-    data.img = req.file;
-    const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-    const { path } = data.img;
-    const newPath = await uploader(path);
-    data.img = newPath.url;
-  }  
+  // if (req.file) {
+  //   data.img = req.file;
+  //   const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+  //   const { path } = data.img;
+  //   const newPath = await uploader(path);
+  //   data.img = newPath.url;
+  // }  
   const userRole = req.role;
   if (userRole === 'admin' || userRole === 'user') {
     vehicleModel
@@ -161,6 +182,7 @@ const deleteVehicle = (req, res, next) => {
 module.exports = {
   getAllVehicle,
   getVehicleById,
+  getVehicleByTypeAndCity,
   insertVehicle,
   updateVehicle,
   deleteVehicle,

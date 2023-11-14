@@ -9,6 +9,7 @@ router
   .get('/', auth.verifyAccess, userController.getAllUser)
   .put('/forgot/:email', userController.forgotPassword)
   .use('/confirm', userController.sendEmailForgot)
+  .get('/email-forgot/:email', userController.sendEmailForgot)
   .post('/register', upload.single('profilePicture'), userController.register)
   .post('/login', userController.login)
   .get('/:idsaya', auth.verifyAccess, userController.getUserById)
