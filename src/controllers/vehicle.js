@@ -86,13 +86,13 @@ const insertVehicle = async (req, res, next) => {
       userId: userId,
       createdAt: new Date(),
     };
-    if (req.file) {
-      data.img = req.file;
-      const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-      const { path } = data.img;
-      const newPath = await uploader(path);
-      data.img = newPath.url;
-    }  
+    // if (req.file) {
+    //   data.img = req.file;
+    //   const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+    //   const { path } = data.img;
+    //   const newPath = await uploader(path);
+    //   data.img = newPath.url;
+    // }  
     // fs.unlinkSync(path.dirname(''))
     vehicleModel
       .insertVehicle(data)
@@ -117,12 +117,28 @@ const updateVehicle = async (req, res, next) => {
   // const description =req.body.description
   const id = req.params.id;
   const { name, price, description, stock, city, type, prepayment } = req.body;
+  let imageProduct = "";
+  let imageProductInput = "";
+  if (!req.file) {
+    imageProductInput = ""
+  } else {
+    imageProductInput = req.file.filename
+  }
+  await vehicleModel.getVehicleById(id).then((result) => {
+    const oldImageProduct = result[0].img
+    const newImageProduct = `${process.env.BASE_URL}/file/${imageProductInput}`
+    if (imageProductInput == '') {
+      imageProduct = oldImageProduct
+    } else {
+      imageProduct = newImageProduct
+    }
+  })
   const data = {
     name: name,
     price: price,
     description: description,
     stock: stock,
-    img: `${process.env.BASE_URL}/file/${req.file.filename}`,
+    img: imageProduct,
     prepayment: prepayment,
     type: type,
     city: city,
