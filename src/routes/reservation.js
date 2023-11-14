@@ -10,5 +10,6 @@ router
   .get('/user/:id', auth.verifyAccess, reservationController.getReservationUser)
   .post('/', auth.verifyAccess, reservationController.insertReservation)
   .use('/payment/:id', auth.verifyAccess, reservationController.approvePayment)
+  .use('/change-status/:id', auth.verifyAccess, reservationController.changeStatusReservation)
   .delete('/:id', auth.verifyAccess, reservationController.deleteReservation)
 module.exports = router

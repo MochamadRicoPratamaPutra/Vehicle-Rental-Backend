@@ -142,6 +142,29 @@ const approvePayment = (req, res, next) => {
     next(errorMessage);
   }
 };
+
+const changeStatusReservation = (req, res, next) => {
+  const id = req.params.id;
+  const userRole = req.role;
+  console.log(id);
+  if (userRole === 'admin') {
+    reservationModel
+      .changeStatusReservation(id)
+      .then((result) => {
+        const reservations = result;
+        // client.setex(`reservation/${id}`, 60, JSON.stringify(reservations))
+        helpers.response(res, reservations, 200);
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = new createError.InternalServerError();
+        next(errorMessage);
+      });
+  } else {
+    const errorMessage = new createError.Forbidden();
+    next(errorMessage);
+  }
+};
 module.exports = {
   getAllReservation,
   getReservationById,
@@ -149,4 +172,5 @@ module.exports = {
   insertReservation,
   deleteReservation,
   approvePayment,
+  changeStatusReservation
 };

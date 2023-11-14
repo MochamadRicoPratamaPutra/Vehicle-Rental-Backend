@@ -168,7 +168,7 @@ const getAllReservation = (page, limit, column, search, sort, keyword) => {
         });
       } else {
         connection.query(
-          'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id = reservation.userIdBorrower AND vehicle.id = reservation.vehicleId',
+          'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, reservation.returnAt, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id = reservation.userIdBorrower AND vehicle.id = reservation.vehicleId',
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -184,7 +184,7 @@ const getAllReservation = (page, limit, column, search, sort, keyword) => {
 const getReservationById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE reservation.id = ? AND reservation.userIdBorrower = user.id AND reservation.vehicleId = vehicle.id',
+      'SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, reservation.returnAt, vehicle.price, reservation.totalPayment, user.name as userName, user.email, user.phone from reservation INNER JOIN user INNER JOIN vehicle WHERE reservation.id = ? AND reservation.userIdBorrower = user.id AND reservation.vehicleId = vehicle.id',
       id,
       (error, result) => {
         if (!error) {
@@ -202,7 +202,7 @@ const getReservationUser = (id) => {
     connection.query(
       `SELECT reservation.id as reservationId, reservation.status, reservation.bookingCode, vehicle.img, 
       vehicle.city, reservation.quantity, reservation.paymentMethod, reservation.paymentCode, vehicle.prepayment, 
-      vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, vehicle.price, 
+      vehicle.name AS vehicleName, reservation.createdAt AS reservationDate, reservation.returnAt, vehicle.price, 
       reservation.totalPayment, user.name as userName, user.email, user.phone, reservation.userIdBorrower 
       from reservation INNER JOIN user INNER JOIN vehicle WHERE user.id LIKE '${id}' 
       AND reservation.userIdBorrower LIKE '${id}' AND vehicle.id = reservation.vehicleId`,
@@ -251,6 +251,18 @@ const approvePayment = (id) => {
     });
   });
 };
+
+const changeStatusReservation = (id) => {
+  return new Promise((resolve, reject) => {
+    connection.query('UPDATE reservation SET status="expired" WHERE id = ?', id, (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
 module.exports = {
   getAllReservation,
   getReservationById,
@@ -258,4 +270,5 @@ module.exports = {
   insertReservation,
   deleteReservation,
   approvePayment,
+  changeStatusReservation
 };
