@@ -180,7 +180,7 @@ const getVehicleByTypeAndCity = (page, limit, type, city, sort) => {
       (error, result) => {
         if (!error) {
           connection.query(
-            "SELECT COUNT(*) AS count FROM vehicle",
+            "SELECT COUNT(*) AS count FROM vehicle WHERE type = '${type}' AND city = '${city}'",
             (errorCount, resultCount) => {
               if (!errorCount) {
                 console.log(resultCount[0].count);
