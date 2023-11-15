@@ -56,6 +56,25 @@ const updateUser = async (req, res, next) => {
   const id = req.params.id;
   const userRole = req.role;
   const userId = req.id;
+  let imageProduct = "";
+  let imageProductInput = "";
+  if (!req.file) {
+    imageProductInput = ""
+  } else {
+    imageProductInput = req.file.filename
+  }
+  console.log(imageProductInput)
+  await userModel.getUserById(userId).then((result) => {
+    console.log(result)
+    const oldImageProduct = result[0].profilePicture
+    const newImageProduct = `${process.env.BASE_URL}/file/${imageProductInput}`
+    if (imageProductInput == '') {
+      imageProduct = oldImageProduct
+    } else {
+      imageProduct = newImageProduct
+    }
+  })
+  console.log(imageProduct)
   const { name, email, phone, gender, birthDate, address, displayName } = req.body;
   if (userRole === 'user') {
     if (id === userId) {
@@ -68,16 +87,18 @@ const updateUser = async (req, res, next) => {
         name: name,
         email: email,
         gender: gender,
-        // profilePicture: `${process.env.BASE_URL}/file/${req.file.filename}` || null,
+        profilePicture: imageProduct,
         updatedAt: new Date(),
+        id: id
       };
-      if (req.file) {
-        data.profilePicture = req.file;
-        const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-        const { path } = data.profilePicture;
-        const newPath = await uploader(path);
-        data.profilePicture = newPath.url;
-      }  
+      // if (req.file) {
+      //   data.profilePicture = req.file;
+      //   const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+      //   const { path } = data.profilePicture;
+      //   const newPath = await uploader(path);
+      //   data.profilePicture = newPath.url;
+      // } 
+      console.log(data) 
       userModel
         .updateUser(id, data)
         .then(() => {
