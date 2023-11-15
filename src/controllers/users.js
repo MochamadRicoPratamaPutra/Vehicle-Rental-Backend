@@ -187,7 +187,7 @@ const verificationUser = (req, res, next) => {
     });
 };
 const sendEmailForgot = (req, res, next) => {
-  const { email } = req.body;
+  const email = req.params.email;
   const user = userModel.findUser(email);
   if (user.length !== 0) {
     confirmForgot.main(email);
