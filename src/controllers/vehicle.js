@@ -79,7 +79,7 @@ const insertVehicle = async (req, res, next) => {
       price: price,
       description: description,
       stock: stock,
-      // img: `${process.env.BASE_URL}/file/${req.file.filename}`,
+      img: `${process.env.BASE_URL}/file/${req.file.filename}`,
       prepayment: prepayment,
       type: type,
       city: city,
