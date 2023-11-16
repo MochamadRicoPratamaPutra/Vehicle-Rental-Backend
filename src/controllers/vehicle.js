@@ -48,12 +48,30 @@ const getVehicleByTypeAndCity = (req, res, next) => {
     });
 }
 
-const getVehicleById = (req, res, next) => {
+const getVehicleById = async(req, res, next) => {
   const id = req.params.idsaya;
+  let quantityTaken = 0
+  await vehicleModel.checkQuantity(id).then((result) => {
+    result.forEach(element => {
+      console.log(element.quantity)
+      quantityTaken = quantityTaken + element.quantity
+    });
+  }).catch((err) => {
+    console.log(err)
+  })
+  console.log('test')
+  console.log(quantityTaken)
   vehicleModel
     .getVehicleById(id)
     .then((result) => {
       const vehicles = result;
+      let quantityAvailability = false
+      if (vehicles[0].stock - quantityTaken > 0) {
+        quantityAvailability = true
+      } else {
+        quantityAvailability = false
+      }
+      vehicles[0].quantityAvailability = quantityAvailability
       // client.setex(`vehicle/${id}`, 60, JSON.stringify(vehicles))
       helpers.response(res, vehicles, 200);
     })

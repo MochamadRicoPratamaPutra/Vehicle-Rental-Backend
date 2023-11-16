@@ -223,6 +223,18 @@ const getVehicleById = (id) => {
   })
 }
 
+const checkQuantity = (id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(`SELECT * FROM reservation WHERE vehicleId = ? AND (status = 'waiting for payment' OR status = 'active')`, id, (error, result) => {
+      if (!error) {
+        resolve(result)
+      } else {
+        reject(error)
+      }
+    })
+  })
+}
+
 const insertVehicle = (data) => {
   return new Promise((resolve, reject) => {
     connection.query('INSERT INTO vehicle SET ?', data, (error, result) => {
@@ -265,5 +277,6 @@ module.exports = {
   getVehicleByTypeAndCity,
   insertVehicle,
   updateVehicle,
-  deleteVehicle
+  deleteVehicle,
+  checkQuantity
 }
